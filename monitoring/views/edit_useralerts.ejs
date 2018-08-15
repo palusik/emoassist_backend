@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%=title%></title>
+        <script type="text/javascript" src="/../js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/../css/style.css">
+    </head>
+<body>
+<form method="post" action="" id="the-form">
+    <table cellpadding="11">
+    <tr>
+        <td class="label">Created</td><td>: <input type="text" name="created" value="<%=data[0].created%>"></td>
+     </tr>
+    <tr>
+        <td class="label">User ID</td><td><%=data[0].userid%></td>
+     </tr>
+        <tr>
+            <td class="label">Type</td><td>: <input type="text" name="type" value="<%=data[0].type%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Status</td><td>: <input type="text" name="status" value="<%=data[0].status%>"></td>
+        </tr>
+     <tr>
+        <td class="label"></td>
+        <td>
+            &nbsp; <input type="button" value="Save" onClick="saveAlert()">
+        </td>
+     </tr>
+    </table>
+</form>
+ <script>
+    
+        function saveAlert(){
+           
+           $.ajax({
+            
+            url:"/api/alerts/"+<%=data[0].idalerts%>,
+            type:"put",
+            data:$("#the-form").serialize(),
+            success:function(res){
+                
+                window.location.href = '/api/useralerts'+<%=data[0].userid%>;
+                return false;
+            },
+            error:function(xhr, status, error){
+                
+                console.log(xhr.responseText);
+                var err = '';
+                $.each(JSON.parse(xhr.responseText) , function(i, item) {
+                   
+                     err +='<li>'+item.msg+'</li>';
+                });
+                $(".err-area").html(err);    
+                return false;
+            }
+            
+           });
+        }
+    
+    </script>
+</body>
+</html>

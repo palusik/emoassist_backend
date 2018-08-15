@@ -1,0 +1,17 @@
+{
+  "name": "rest-emo",
+  "description": "REST CRUD Node.js & Mysql",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.9.0",
+    "ejs": "^1.0.0",
+    "express": "^4.9.5",
+    "express-myconnection": "*",
+    "express-validator": "^2.6.0",
+    "mysql": "*"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%=title%></title>
+        <script type="text/javascript" src="/../js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/../css/style.css">
+    </head>
+<body>
+<div class="data-table">
+    <table border="1" cellpadding="7" cellspacing="7">
+        <tr>
+            <th width="50px">Id</th>
+            <th>User Id</th>
+            <th>Happy</th>
+            <th>Neutral</th>
+            <th>Anger</th>
+            <th>Sad</th>
+            <th>Fear</th>
+            <th>Call</th>
+            <th>Music</th>
+            <th>Activity</th>
+            <th>Book</th>
+            <th>Picture</th>
+
+        </tr>
+                       
+        <% if(data.length){ 
+                        
+         for(var i = 0;i < data.length;i++) { %>
+         
+        <tr>
+            <td><%=data[i].idactions%></td>
+            <td><%=data[i].userid%></td>
+            <td><%=data[i].haction%></td>
+            <td><%=data[i].naction%></td>
+            <td><%=data[i].aaction%></td>
+            <td><%=data[i].saction%></td>
+            <td><%=data[i].faction%></td>
+            <td><%=data[i].call%></td>
+            <td><%=data[i].music%></td>
+            <td><%=data[i].activity%></td>
+            <td><%=data[i].book%></td>
+            <td><%=data[i].picture%></td>
+            <td>
+                <a class="a-inside edit_actions" href="/api/actions/<%=data[i].userid%>">Edit</a>
+               
+                <a class="a-inside delete" href="javascript:void(0)" onClick='deleteAction("<%=data[i].userid%>")'>Delete</a>
+               
+            </td>
+        </tr>
+    <% }
+    
+     }else{ %>
+         <tr>
+            <td colspan="5">No Data</td>
+         </tr>
+    <% } %>
+                                      
+    </table>
+</div>
+<div class="page-data">
+    
+    <form method="post" action="" id="the-form">
+        <table cellpadding="11">
+            <tr>
+                <td class="label">User Id</td><td>: <input type="text" name="userid"></td>
+            </tr>
+            <tr>
+                <td class="label">Happy Action</td><td>: <input type="text" name="haction"></td>
+            </tr>
+            <tr>
+                <td class="label">Neutral Action</td><td>: <input type="text" name="naction"></td>
+            </tr>
+            <tr>
+                <td class="label">Happy Action</td><td>: <input type="text" name="aaction"></td>
+            </tr>
+            <tr>
+                <td class="label">Sad Action</td><td>: <input type="text" name="saction"></td>
+            </tr>
+            <tr>
+                <td class="label">Fear Action</td><td>: <input type="text" name="faction"></td>
+            </tr>
+            <tr>
+                <td class="label">Call</td><td>: <input type="text" name="call"></td>
+            </tr>
+            <tr>
+                <td class="label">Music</td><td>: <input type="text" name="music"></td>
+            </tr>
+            <tr>
+                <td class="label">Activity</td><td>: <input type="text" name="activity"></td>
+            </tr>
+            <tr>
+                <td class="label">Book</td><td>: <input type="text" name="book"></td>
+            </tr>
+            <tr>
+                <td class="label">Picture</td><td>: <input type="text" name="picture"></td>
+            </tr>
+         <tr>
+            <td class="label"></td>
+            <td>
+                &nbsp; <input type="button" value="Save" onClick="saveAction()">
+            </td>
+         </tr>
+        </table>
+    </form>
+</div>
+<div class="page-data">
+     <ul class="err-area"></ul>
+</div>
+
+<script>
+
+    function saveAction(){
+       
+       $.ajax({
+        
+        url:"/api/actions",
+        type:"post",
+        data:$("#the-form").serialize(),
+        success:function(res){
+            
+            window.location.reload();
+            return false;
+        },
+        error:function(xhr, status, error){
+            
+            console.log(xhr.responseText);
+            var err = '';
+            $.each(JSON.parse(xhr.responseText) , function(i, item) {
+               
+                 err +='<li>'+item.msg+'</li>';
+            });
+            $(".err-area").html(err);    
+            return false;
+        }
+        
+       });
+    }
+    
+    function deleteAction(userid){
+
+        $.ajax({
+            url:"/api/actions/"+userid,
+            type: 'DELETE',
+            success: function(res) {
+                
+                window.location.reload();
+                return false;
+            },
+            error:function(xhr, status, error){
+            
+                console.log(xhr.responseText);
+                alert("Error deleting");
+                return false;
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

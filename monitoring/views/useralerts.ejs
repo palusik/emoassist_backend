@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%=title%></title>
+        <script type="text/javascript" src="/../js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/../css/style.css">
+    </head>
+<body>
+<div class="data-table">
+    <table border="1" cellpadding="7" cellspacing="7">
+        <tr>
+            <th width="50px">Id</th>
+            <th>Created</th>
+            <th>UserId</th>
+            <th>Type</th>
+            <th>Probability</th>
+            <th>HR</th>
+            <th>Action Type</th>
+            <th>Target/th>
+            <th>Status</th>
+        </tr>
+                       
+        <% if(data.length){ 
+                        
+         for(var i = 0;i < data.length;i++) { %>
+         
+        <tr>
+            <td><%=data[i].idalerts%></td>
+            <td><%=data[i].created%></td>
+            <td><%=data[i].userid%></td>
+            <td class"<%=data[i].type%>"><%=data[i].type%></td>
+            <td><%=data[i].probability%></td>
+            <td><%=data[i].hr%></td>
+            <td><%=data[i].alert_type%></td>
+            <td><%=data[i].target%></td>
+            <td><%=data[i].status%></td>
+
+            <td>
+                <a class="a-inside edit_useralerts" href="/api/alerts/<%=data[i].idalerts%>">Edit</a>
+                <a class="a-inside view_actions" href="/api/actions/<%=data[i].userid%>">Actions</a>
+                <a class="a-inside delete" href="javascript:void(0)" onClick="deleteAlert(<%=data[i].idalerts%>)">Delete</a>
+               
+            </td>
+        </tr>
+    <% }
+    
+     }else{ %>
+         <tr>
+            <td colspan="5">No Data</td>
+         </tr>
+    <% } %>
+                                      
+    </table>
+</div>
+<div class="page-data">
+     <ul class="err-area"></ul>
+</div>
+
+<script>
+
+    function deleteAlert(alertid){
+    
+        $.ajax({
+            url:"/api/alerts/"+alertid,
+            type: 'DELETE',
+            success: function(res) {
+                
+                window.location.reload();
+                return false;
+            },
+            error:function(xhr, status, error){
+            
+                console.log(xhr.responseText);
+                alert("Error deleting");
+                return false;
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

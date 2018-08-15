@@ -1,0 +1,33 @@
+body{ FONT: 11px verdana, arial, helvetica, sans-serif; background:#fff;width:100%}
+INPUT {FONT: 11px verdana, arial, helvetica, sans-serif}
+BUTTON {FONT: 11px verdana, arial, helvetica, sans-serif}
+table {
+    font: 11px verdana, arial, helvetica, sans-serif;
+    border-spacing: 0px;
+    padding: 1px;
+    border: 0px;
+}
+ul.err-area li{color:red}
+.data-table{float:left;display:inline-block}
+.data-table table{border-collapse:collapse;border:1px solid #ddd;}
+.page-data{float:left;display:inline-block;}
+
+td.H {
+    color: #02cc02;
+}
+
+td.A {
+    color: #ff0202;
+}
+
+td.S {
+    color: #02b1f0;
+}
+
+td.F {
+    color: #7d7d7d;
+}
+
+td.N {
+    color: #ffc002;
+}

@@ -1,0 +1,138 @@
+{
+    "$connections": {
+        "value": {
+            "twilio": {
+                "connectionId": "XXXXXXX",
+                "connectionName": "XXXXXXX",
+                "id": "XXXXXXX"
+            }
+        }
+    },
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Condition": {
+                "actions": {
+                    "Response_2": {
+                        "inputs": {
+                            "body": "SENT@{triggerBody()?['action']}@{triggerBody()?['alert']}",
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "schema": {
+                                "properties": {
+                                    "status": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "statusCode": 200
+                        },
+                        "kind": "Http",
+                        "runAfter": {
+                            "Send_Text_Message_(SMS)": [
+                                "Succeeded"
+                            ]
+                        },
+                        "type": "Response"
+                    },
+                    "Send_Text_Message_(SMS)": {
+                        "inputs": {
+                            "body": {
+                                "body": "User @{triggerBody()?['userid']} needs your help. His emotion state is: @{triggerBody()?['type']} with probability:@{triggerBody()?['probability']}, hear rate:@{triggerBody()?['hr']}",
+                                "from": "XXXXXX",
+                                "to": "@triggerBody()?['alert']"
+                            },
+                            "host": {
+                                "connection": {
+                                    "name": "@parameters('$connections')['twilio']['connectionId']"
+                                }
+                            },
+                            "method": "post",
+                            "path": "/Messages.json"
+                        },
+                        "runAfter": {},
+                        "type": "ApiConnection"
+                    }
+                },
+                "else": {
+                    "actions": {
+                        "Response": {
+                            "inputs": {
+                                "body": "@{triggerBody()?['alert']}@{triggerBody()?['action']} Submitted",
+                                "headers": {
+                                    "Content-Type": "applicaiton/json"
+                                },
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "statusCode": 200
+                            },
+                            "kind": "Http",
+                            "runAfter": {},
+                            "type": "Response"
+                        }
+                    }
+                },
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@triggerBody()?['action']",
+                                "Call"
+                            ]
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "type": "If"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {
+            "$connections": {
+                "defaultValue": {},
+                "type": "Object"
+            }
+        },
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "method": "POST",
+                    "schema": {
+                        "properties": {
+                            "action": {
+                                "type": "string"
+                            },
+                            "alert": {
+                                "type": "string"
+                            },
+                            "hr": {
+                                "type": "number"
+                            },
+                            "probability": {
+                                "type": "number"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "userid": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    }
+}

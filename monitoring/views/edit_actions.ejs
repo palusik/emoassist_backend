@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%=title%></title>
+        <script type="text/javascript" src="/../js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/../css/style.css">
+    </head>
+<body>
+<form method="post" action="" id="the-form">
+    <table cellpadding="11">
+    <tr>
+        <td class="label">User</td><td>: <input type="text" name="name" value="<%=data[0].userid%>"></td>
+     </tr>
+    <tr>
+        <td class="label">Happy Action</td><td>: <input type="text" name="haction" value="<%=data[0].haction%>"></td>
+     </tr>
+        <tr>
+            <td class="label">Neutral Action</td><td>: <input type="text" name="naction" value="<%=data[0].naction%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Angry Action</td><td>: <input type="text" name="aaction" value="<%=data[0].aaction%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Sad Action</td><td>: <input type="text" name="saction" value="<%=data[0].saction%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Fear Action</td><td>: <input type="text" name="faction" value="<%=data[0].faction%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Call</td><td>: <input type="text" name="call" value="<%=data[0].call%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Music</td><td>: <input type="text" name="music" value="<%=data[0].music%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Activity</td><td>: <input type="text" name="activity" value="<%=data[0].activity%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Book</td><td>: <input type="text" name="book" value="<%=data[0].book%>"></td>
+        </tr>
+        <tr>
+            <td class="label">Picture</td><td>: <input type="text" name="picture" value="<%=data[0].picture%>"></td>
+        </tr>
+     <tr>
+        <td class="label"></td>
+        <td>
+            &nbsp; <input type="button" value="Save" onClick="saveAction()">
+        </td>
+     </tr>
+    </table>
+</form>
+ <script>
+    
+        function saveAction(){
+           
+           $.ajax({
+            
+            url:"/api/actions/"+<%=data[0].idactions%>,
+            type:"put",
+            data:$("#the-form").serialize(),
+            success:function(res){
+                
+                window.location.href = '/api/actions';
+                return false;
+            },
+            error:function(xhr, status, error){
+                
+                console.log(xhr.responseText);
+                var err = '';
+                $.each(JSON.parse(xhr.responseText) , function(i, item) {
+                   
+                     err +='<li>'+item.msg+'</li>';
+                });
+                $(".err-area").html(err);    
+                return false;
+            }
+            
+           });
+        }
+    
+    </script>
+</body>
+</html>
